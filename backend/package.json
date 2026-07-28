@@ -15,7 +15,9 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
