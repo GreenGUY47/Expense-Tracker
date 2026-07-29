@@ -12,7 +12,6 @@ const authSchema = new mongoose.Schema(
       minlength: 3,
       maxlength: 20,
       trim: true,
-      lowercase: true,
       unique: true,
     },
     email: {
