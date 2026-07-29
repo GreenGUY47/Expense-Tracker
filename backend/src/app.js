@@ -4,8 +4,7 @@ import cookieparser from "cookie-parser";
 import expressratelimit from "express-rate-limit";
 import helmet from "helmet";
 import compression from "compression";
-import router from "./routes/auth.route.js"
-
+import router from "./routes/auth.route.js";
 
 const whitelisting = ["http://localhost:5173", process.env.CORS].filter(Boolean);
 
@@ -49,10 +48,7 @@ app.use(helmet());
 app.use(compression());
 
 //Routes here
-app.use("/api/auth", router)
-
-
-
+app.use("/api/auth", router);
 
 app.use((req, res) => {
   return res.status(404).json({
