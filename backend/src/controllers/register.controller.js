@@ -1,4 +1,5 @@
 import Auth from "../models/auth.model.js";
+import { accessToken, refreshToken } from "../services/token.service.js";
 
 const register = async (req, res) => {
   const { userName, email, password } = req.body;
@@ -25,10 +26,18 @@ const register = async (req, res) => {
       email,
       password,
     });
+    const access = accessToken(newUser);
+    const refresh = refreshToken(newUser);
+    res.cookie("refreshToken", refresh, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
     res.status(201).json({
       success: true,
       message: "New user created successfully ✅",
       newUser: userName,
+      accessToken: access,
     });
   } catch (err) {
     return res.status(err.status || 500).json({
