@@ -21,6 +21,7 @@ const income = async (req, res) => {
       });
     }
     const income = await Income.create({
+      user: req.user.id,
       source,
       amount,
       date,
