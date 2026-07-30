@@ -28,10 +28,13 @@ const register = async (req, res) => {
     });
     const access = accessToken(newUser);
     const refresh = refreshToken(newUser);
+    newUser.refreshToken = refresh;
+    await newUser.save({ validateBeforeSave: false });
     res.cookie("refreshToken", refresh, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
+      maxAge: 10 * 24 * 60 * 60 * 1000,
     });
     res.status(201).json({
       success: true,

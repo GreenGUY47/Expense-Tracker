@@ -6,6 +6,9 @@ const authSchema = new mongoose.Schema(
     avatar: {
       type: String,
     },
+    refreshToken: {
+      type: String,
+    },
     userName: {
       type: String,
       required: [true, "Username is required!!!"],
@@ -34,6 +37,15 @@ authSchema.pre("save", async function () {
   if (!this.isModified("password")) return;
   this.password = await bcrypt.hash(this.password, 12);
 });
+authSchema.pre("save", async function () {
+  if (!this.isModified("refreshToken")) return;
+
+  this.refreshToken = await bcrypt.hash(this.refreshToken, 12);
+});
+
+authSchema.methods.compareRefreshToken = async function (token) {
+  return await bcrypt.compare(token, this.refreshToken);
+};
 
 authSchema.methods.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);

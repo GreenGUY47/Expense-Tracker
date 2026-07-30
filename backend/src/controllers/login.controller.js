@@ -29,7 +29,14 @@ const login = async (req, res) => {
     }
     const access = accessToken(user);
     const refresh = refreshToken(user);
-
+    user.refreshToken = refresh;
+    await user.save({ validateBeforeSave: false });
+    res.cookie("refreshToken", refresh, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 10 * 24 * 60 * 60 * 1000,
+    });
     res.status(200).json({
       success: true,
       message: "Login successfully",
