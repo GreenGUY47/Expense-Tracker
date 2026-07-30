@@ -26,6 +26,24 @@ const register = async (req, res) => {
       email,
       password,
     });
+    const defaultCategories = [
+      { name: "Food" },
+      { name: "Transport" },
+      { name: "Rent" },
+      { name: "Bills" },
+      { name: "Shopping" },
+      { name: "Entertainment" },
+      { name: "Healthcare" },
+      { name: "Education" },
+      { name: "Other" },
+    ];
+
+    await Category.insertMany(
+      defaultCategories.map((category) => ({
+        ...category,
+        user: newUser._id,
+      }))
+    );
     const access = accessToken(newUser);
     const refresh = refreshToken(newUser);
     newUser.refreshToken = refresh;

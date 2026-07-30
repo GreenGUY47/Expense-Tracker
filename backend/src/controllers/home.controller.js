@@ -1,4 +1,4 @@
-import Home from "../models/expenseTracker_home.model.js";
+import Home from "../models/tracker_home.model.js";
 
 const createExpense = async (req, res) => {
   const { title, description } = req.body;
