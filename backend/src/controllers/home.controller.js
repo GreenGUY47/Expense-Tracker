@@ -1,26 +1,27 @@
 import Home from "../models/tracker_home.model.js";
 
-const createExpense = async (req, res) => {
-  const { title, description } = req.body;
+const createTracker = async (req, res) => {
+  const { title, description, createdAt } = req.body;
 
   try {
     if (!title) {
       return res.status(400).json({
         success: false,
-        message: "Title is required.",
+        message: "Tracker title is required.",
       });
     }
 
-    const expense = await Home.create({
+    const tracker = await Home.create({
       user: req.user.id,
       title,
       description,
+      createdAt,
     });
 
     return res.status(201).json({
       success: true,
       message: "Tracker created successfully.",
-      expense,
+      tracker,
     });
   } catch (err) {
     return res.status(err.status || 500).json({
@@ -30,109 +31,113 @@ const createExpense = async (req, res) => {
   }
 };
 
-const getExpenses = async (req, res) => {
+const getTrackers = async (req, res) => {
   try {
-    const expenses = await Home.find({
+    const trackers = await Home.find({
       user: req.user.id,
     }).sort({ createdAt: -1 });
 
     return res.status(200).json({
       success: true,
-      count: expenses.length,
-      expenses,
+      trackers,
     });
   } catch (err) {
-    return res.status(500).json({
+    return res.status(err.status || 500).json({
       success: false,
-      message: err.message || "Failed to fetch expenses.",
+      message: err.message || "Failed to fetch trackers.",
     });
   }
 };
 
-const getExpenseById = async (req, res) => {
+const getTracker = async (req, res) => {
   try {
-    const expense = await Home.findOne({
+    const tracker = await Home.findOne({
       _id: req.params.id,
       user: req.user.id,
     });
 
-    if (!expense) {
+    if (!tracker) {
       return res.status(404).json({
         success: false,
-        message: "Expense not found.",
+        message: "Tracker not found.",
       });
     }
 
     return res.status(200).json({
       success: true,
-      expense,
+      tracker,
     });
   } catch (err) {
-    return res.status(500).json({
+    return res.status(err.status || 500).json({
       success: false,
-      message: err.message || "Failed to fetch expense.",
+      message: err.message || "Failed to fetch tracker.",
     });
   }
 };
 
-const updateExpense = async (req, res) => {
+const updateTracker = async (req, res) => {
+  const { title, description } = req.body;
+
   try {
-    const expense = await Home.findOneAndUpdate(
+    const tracker = await Home.findOneAndUpdate(
       {
         _id: req.params.id,
         user: req.user.id,
       },
-      req.body,
+      {
+        title,
+        description,
+      },
       {
         new: true,
         runValidators: true,
       }
     );
 
-    if (!expense) {
+    if (!tracker) {
       return res.status(404).json({
         success: false,
-        message: "Expense not found.",
+        message: "Tracker not found.",
       });
     }
 
     return res.status(200).json({
       success: true,
-      message: "Expense updated successfully.",
-      expense,
+      message: "Tracker updated successfully.",
+      tracker,
     });
   } catch (err) {
-    return res.status(500).json({
+    return res.status(err.status || 500).json({
       success: false,
-      message: err.message || "Failed to update expense.",
+      message: err.message || "Failed to update tracker.",
     });
   }
 };
 
-const deleteExpense = async (req, res) => {
+const deleteTracker = async (req, res) => {
   try {
-    const expense = await Home.findOneAndDelete({
+    const tracker = await Home.findOneAndDelete({
       _id: req.params.id,
       user: req.user.id,
     });
 
-    if (!expense) {
+    if (!tracker) {
       return res.status(404).json({
         success: false,
-        message: "Expense not found.",
+        message: "Tracker not found.",
       });
     }
 
     return res.status(200).json({
       success: true,
-      message: "Expense deleted successfully.",
+      message: "Tracker deleted successfully.",
     });
   } catch (err) {
-    return res.status(500).json({
+    return res.status(err.status || 500).json({
       success: false,
-      message: err.message || "Failed to delete expense.",
+      message: err.message || "Failed to delete tracker.",
     });
   }
 };
 
-export { createExpense, getExpenses, getExpenseById, updateExpense, deleteExpense };
+export { createTracker, getTrackers, getTracker, updateTracker, deleteTracker };

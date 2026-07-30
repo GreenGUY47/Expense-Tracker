@@ -4,8 +4,12 @@ import cookieparser from "cookie-parser";
 import expressratelimit from "express-rate-limit";
 import helmet from "helmet";
 import compression from "compression";
-import authRouter from "./routes/auth.route.js";
-import expenseRouter from "./routes/expence.route.js";
+import authRoute from "./routes/auth.route.js";
+import trackerRoute from "./routes/tracker.route.js";
+import incomeRoute from "./routes/income.route.js";
+import expenseRoute from "./routes/expense.route.js";
+import categoryRoute from "./routes/category.route.js";
+import budgetRoute from "./routes/budget.route.js";
 
 const whitelisting = ["http://localhost:5173", process.env.CORS].filter(Boolean);
 
@@ -48,9 +52,12 @@ app.use(
 app.use(helmet());
 app.use(compression());
 
-//Routes here
-app.use("/api/auth", authRouter);
-app.use("/api/expense", expenseRouter);
+app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/trackers", trackerRoute);
+app.use("/api/v1/incomes", incomeRoute);
+app.use("/api/v1/expenses", expenseRoute);
+app.use("/api/v1/categories", categoryRoute);
+app.use("/api/v1/budgets", budgetRoute);
 
 app.use((req, res) => {
   return res.status(404).json({
