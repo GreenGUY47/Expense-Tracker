@@ -1,4 +1,4 @@
-import Category from "../models/tracker_catagory.model.js"
+import Category from "../models/tracker_catagory.model.js";
 import Auth from "../models/auth.model.js";
 import { accessToken, refreshToken } from "../services/token.service.js";
 

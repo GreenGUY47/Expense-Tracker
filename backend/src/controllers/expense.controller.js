@@ -4,7 +4,6 @@ import Category from "../models/tracker_catagory.model.js";
 
 const createExpense = async (req, res) => {
   const { category, amount, title, description, paymentMethod, date, tracker } = req.body;
-
   try {
     if (!category || amount == null || !title || !paymentMethod || !tracker) {
       return res.status(400).json({

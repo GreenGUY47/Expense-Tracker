@@ -6,10 +6,10 @@ import register from "../controllers/register.controller.js";
 import login from "../controllers/login.controller.js";
 import refreshAccessToken from "../controllers/refresh.controller.js";
 
-const authRouter = Router();
+const router = Router();
 
-authRouter.post("/refresh-token", refreshAccessToken);
-authRouter.post("/register", validator(registerSchema), register);
-authRouter.post("/login", validator(loginSchema), login);
+router.post("/refresh-token", refreshAccessToken);
+router.post("/register", validator(registerSchema), register);
+router.post("/login", validator(loginSchema), login);
 
-export default authRouter;
+export default router;

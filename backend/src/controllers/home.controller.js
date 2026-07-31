@@ -1,4 +1,8 @@
 import Home from "../models/tracker_home.model.js";
+import Budget from "../models/tracker_budget.model.js";
+import Category from "../models/tracker_catagory.model.js";
+import Expense from "../models/tracker_expense.model.js";
+import Income from "../models/tracker_income.model.js";
 
 const createTracker = async (req, res) => {
   const { title, description, createdAt } = req.body;
@@ -116,7 +120,7 @@ const updateTracker = async (req, res) => {
 
 const deleteTracker = async (req, res) => {
   try {
-    const tracker = await Home.findOneAndDelete({
+    const tracker = await Home.findOne({
       _id: req.params.id,
       user: req.user.id,
     });
@@ -127,6 +131,15 @@ const deleteTracker = async (req, res) => {
         message: "Tracker not found.",
       });
     }
+
+    await Promise.all([
+      Expense.deleteMany({ tracker: tracker._id }),
+      Income.deleteMany({ tracker: tracker._id }),
+      Budget.deleteMany({ tracker: tracker._id }),
+      Category.deleteMany({ tracker: tracker._id }),
+    ]);
+
+    await tracker.deleteOne();
 
     return res.status(200).json({
       success: true,
