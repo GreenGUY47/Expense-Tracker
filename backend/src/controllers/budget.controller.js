@@ -14,7 +14,7 @@ const createBudget = async (req, res) => {
 
     const trackerExists = await Home.findOne({
       _id: tracker,
-      owner: req.user.id,
+      user: req.user.id,
     });
 
     if (!trackerExists) {
